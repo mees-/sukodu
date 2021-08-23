@@ -1,32 +1,22 @@
 type SudokuNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-type SudokuCellValue = 0 | SudokuNumber
+type CellValue = 0 | SudokuNumber
 
-type SudokuSet = [
-  SudokuCellValue,
-  SudokuCellValue,
-  SudokuCellValue,
-  SudokuCellValue,
-  SudokuCellValue,
-  SudokuCellValue,
-  SudokuCellValue,
-  SudokuCellValue,
-  SudokuCellValue,
-]
+type Unit = [CellValue, CellValue, CellValue, CellValue, CellValue, CellValue, CellValue, CellValue, CellValue]
 
-type SudokuBoard = [SudokuSet, SudokuSet, SudokuSet, SudokuSet, SudokuSet, SudokuSet, SudokuSet, SudokuSet, SudokuSet]
+type Board = [Unit, Unit, Unit, Unit, Unit, Unit, Unit, Unit, Unit]
 
-type SudokuIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+type UnitIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 
-type SudokuPosition = { row: SudokuIndex; column: SudokuIndex }
+type Position = { row: UnitIndex; column: UnitIndex }
 // Move in sudoku
-type SudokuMove = [SudokuPosition, SudokuNumber]
+type Move = [Position, SudokuNumber]
 
 export default class Sudoku {
   // board stored as rows
-  private _board: SudokuBoard
-  moves: SudokuMove[] = []
+  private _board: Board
+  moves: Move[] = []
 
-  constructor(board?: SudokuBoard) {
+  constructor(board?: Board) {
     if (board != null) {
       this._board = board
     } else {
@@ -47,7 +37,7 @@ export default class Sudoku {
   // TODO: optimise getting one row/column/box
 
   // Hard-coded deep-clone
-  get rows(): SudokuBoard {
+  get rows(): Board {
     return [
       [
         this._board[0][0],
@@ -152,7 +142,7 @@ export default class Sudoku {
   }
 
   // hard-coded transposed deep-clone
-  get columns(): SudokuBoard {
+  get columns(): Board {
     return [
       [
         this._board[0][0],
@@ -257,7 +247,7 @@ export default class Sudoku {
   }
 
   // hard-coded deep-clone
-  get boxes(): SudokuBoard {
+  get boxes(): Board {
     return [
       [
         // 1
@@ -370,15 +360,15 @@ export default class Sudoku {
     ]
   }
 
-  get cellsWithPosition(): [SudokuPosition, SudokuCellValue][] {
+  get cellsWithPosition(): [Position, CellValue][] {
     return this.rows
-      .map<[SudokuPosition, SudokuCellValue][]>((row, rowIndex) =>
-        row.map((cell, columnIndex) => [{ row: rowIndex as SudokuIndex, column: columnIndex as SudokuIndex }, cell]),
+      .map<[Position, CellValue][]>((row, rowIndex) =>
+        row.map((cell, columnIndex) => [{ row: rowIndex as UnitIndex, column: columnIndex as UnitIndex }, cell]),
       )
       .flat()
   }
 
-  private static hasDuplicateNumber(set: SudokuSet, optionalNewNumber?: SudokuNumber) {
+  private static hasDuplicateNumber(set: Unit, optionalNewNumber?: SudokuNumber) {
     const found = new Set<SudokuNumber>()
     if (optionalNewNumber != null) {
       found.add(optionalNewNumber)
@@ -401,7 +391,7 @@ export default class Sudoku {
     )
   }
 
-  static determineBoxIndex({ row, column }: SudokuPosition) {
+  static determineBoxIndex({ row, column }: Position) {
     if (row < 3) {
       if (column < 3) {
         return 0
@@ -428,7 +418,7 @@ export default class Sudoku {
       }
     }
   }
-  moveIsValid([{ row, column }, number]: SudokuMove) {
+  moveIsValid([{ row, column }, number]: Move) {
     return (
       [this.rows[row], this.columns[column], this.boxes[Sudoku.determineBoxIndex({ row, column })]]
         .map(set => Sudoku.hasDuplicateNumber(set, number))
@@ -436,7 +426,7 @@ export default class Sudoku {
     )
   }
 
-  performMove([{ row, column }, number]: SudokuMove) {
+  performMove([{ row, column }, number]: Move) {
     this._board[row][column] = number
     this.moves.push([{ row, column }, number])
   }
@@ -450,7 +440,7 @@ export default class Sudoku {
     }
   }
 
-  findNextFreeCell(): SudokuPosition | null {
+  findNextFreeCell(): Position | null {
     for (const [position, value] of this.cellsWithPosition) {
       if (value == 0) {
         return position
@@ -463,7 +453,7 @@ export default class Sudoku {
     const cellToTry = this.findNextFreeCell()
     if (cellToTry != null) {
       for (let i = 1; i <= 9; i++) {
-        const move: SudokuMove = [cellToTry, i as SudokuNumber]
+        const move: Move = [cellToTry, i as SudokuNumber]
         if (this.moveIsValid(move)) {
           this.performMove(move)
           const foundSolution = this.recursiveTryMoves()
