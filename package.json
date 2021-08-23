@@ -1,7 +1,7 @@
 {
   "name": "sukodu",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.2.0",
+  "description": "A sudoku solver library",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
