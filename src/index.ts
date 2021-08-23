@@ -430,7 +430,7 @@ export default class Sudoku {
   }
   moveIsValid([{ row, column }, number]: SudokuMove) {
     return (
-      [this.rows[column], this.columns[row], this.boxes[Sudoku.determineBoxIndex({ row, column })]]
+      [this.rows[row], this.columns[column], this.boxes[Sudoku.determineBoxIndex({ row, column })]]
         .map(set => Sudoku.hasDuplicateNumber(set, number))
         .includes(false) === false
     )
@@ -468,10 +468,13 @@ export default class Sudoku {
           this.performMove(move)
           const foundSolution = this.recursiveTryMoves()
           if (foundSolution) {
-            return true
+            return true // a solution has been found in this path
+          } else {
+            this.reverseLastMove()
           }
         }
       }
+      // loop ended without returning true, backtrack to step before
       return false
     } else {
       // this is the recursion end condition

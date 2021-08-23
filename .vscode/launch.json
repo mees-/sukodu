@@ -7,14 +7,10 @@
     {
       "type": "pwa-node",
       "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "program": "${workspaceFolder}/src/index.ts",
-      "outFiles": [
-        "${workspaceFolder}/**/*.js"
-      ]
+      "name": "Run test",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/src/test.ts",
+      "outFiles": ["${workspaceFolder}/build/**/*.js"]
     }
   ]
 }
