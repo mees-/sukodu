@@ -21,7 +21,7 @@ type SudokuPosition = { row: SudokuIndex; column: SudokuIndex }
 // Move in sudoku
 type SudokuMove = [SudokuPosition, SudokuNumber]
 
-export class Sudoku {
+export default class Sudoku {
   // board stored as rows
   private _board: SudokuBoard
   moves: SudokuMove[] = []
