@@ -1,0 +1,15 @@
+{
+  "name": "sukodu",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mees van Dijk <mees@mees.io> (https://mees.io/)",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node": "^10.2.1",
+    "typescript": "^4.3.5"
+  }
+}
