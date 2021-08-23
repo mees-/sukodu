@@ -1,5 +1,5 @@
 type SudokuNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-type SudokuCellValue = null | SudokuNumber
+type SudokuCellValue = 0 | SudokuNumber
 
 type SudokuSet = [
   SudokuCellValue,
@@ -31,15 +31,15 @@ export default class Sudoku {
       this._board = board
     } else {
       this._board = [
-        [null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
       ]
     }
   }
@@ -384,7 +384,7 @@ export default class Sudoku {
       found.add(optionalNewNumber)
     }
     for (const num of set) {
-      if (num != null) {
+      if (num != 0) {
         if (found.has(num)) {
           return false
         } else {
@@ -444,7 +444,7 @@ export default class Sudoku {
     const lastMove = this.moves.pop()
     if (lastMove != null) {
       const [{ row, column }] = lastMove
-      this._board[row][column] = null
+      this._board[row][column] = 0
     } else {
       throw new Error("No moves recorded")
     }
@@ -452,7 +452,7 @@ export default class Sudoku {
 
   findNextFreeCell(): SudokuPosition | null {
     for (const [position, value] of this.cellsWithPosition) {
-      if (value == null) {
+      if (value == 0) {
         return position
       }
     }
